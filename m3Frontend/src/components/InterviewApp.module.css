@@ -1,0 +1,186 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  margin: auto;
+  background-color: #0073cf;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  gap: 1.5rem;
+  font-family: "Lato", sans-serif;
+  padding: 2rem 0;
+}
+
+.logo {
+  width: 10rem;
+  border-radius: 100%;
+}
+
+.heading {
+  color: #0073cf;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  background-color: #ffffff;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
+}
+
+.jobTitleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 35rem;
+  gap: 0.5rem;
+}
+
+.label {
+  color: #fefcfc;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.inputBox {
+  width: 35rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 2px solid #b71234;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.inputBox:focus {
+  outline: none;
+  border-color: #053975;
+}
+
+/* chat history */
+
+.chatHistoryContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.role {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.role strong {
+  color: #002b5c;
+}
+
+.userInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.userResponseInput {
+  flex: 1;
+}
+/* buttons */
+.submitButton,
+.startButton,
+.resetButton {
+  width: 35rem;
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: block;
+  padding: 15px 32px;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.submitButton {
+  background-color: #b71234;
+  color: white;
+}
+
+.submitButton:hover {
+  background-color: #4e0715;
+}
+
+.startButton {
+  background-color: #b71234;
+  color: white;
+}
+
+.startButton:hover {
+  background-color: rgb(2, 92, 2);
+}
+
+.resetButton {
+  background-color: #fefcfc;
+  font-style: italic;
+  color: black;
+  font-weight: 500;
+  width: 25%;
+}
+
+.resetButton:hover {
+  background-color: #4e0715;
+  color: white;
+}
+
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.error {
+  color: #b71234;
+  background-color: #ffe6e6;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #b71234;
+  margin: 1rem 0;
+  text-align: center;
+  width: 35rem;
+}
+
+.submitButton,
+.startButton {
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .container h2 {
+    font-size: 1.5rem;
+  }
+}
