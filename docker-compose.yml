@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./m3Frontend
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+    environment:
+      - REACT_APP_API_URL=http://backend:5001
+
+  backend:
+    build:
+      context: ./m3Backend
+    ports:
+      - "5001:5001"
+    environment:
+      - API_KEY=${API_KEY}
+    env_file:
+      - .env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

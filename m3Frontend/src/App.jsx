@@ -1,10 +1,10 @@
 import "./App.css";
-import InterviewApp from "./components/InterviewApp";
+import InsuranceRec from "./components/InsuranceRec";
 
 function App() {
   return (
     <>
-      <InterviewApp />
+      <InsuranceRec />
     </>
   );
 }

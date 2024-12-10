@@ -1,0 +1,34 @@
+#BUILD STAGE
+
+# step 1 - use node.js as the base image
+FROM node:18 AS builder
+
+# step 2 - set the working directory inside the container
+WORKDIR /app
+
+# step 3 - copy package.json 
+COPY package*.json ./
+
+# step 4 - install dependencies
+RUN npm install
+
+#step 5 -copy all the app code
+COPY . .
+
+# PRODUCTION STAGE
+FROM node:18-alpine
+
+# step 6 - set the working directory inside the container
+WORKDIR /app
+
+# step 7 - copy dependencies and app code from the build stage
+COPY --from=builder /app /app
+
+# step 8 - Only install production dependencies
+RUN npm install --production
+
+#step 9 - define how to run the app
+CMD ["npm", "start"]
+
+#step 10 - exose a port to view the app
+EXPOSE 5001

@@ -1,0 +1,33 @@
+# BUILD STAGE
+
+#step 1 - use node.js as the base image
+FROM node:18 AS builder
+
+#step 2 - set the working directory inside the container
+WORKDIR /app
+
+#step 3 - copy package.json install dependencies
+COPY package*.json ./
+
+#Step 4 - install dependencies
+RUN npm install
+
+#step 5 -copy all the app code
+COPY . .
+
+#step 6 - build app for production
+RUN npm run build
+
+# PRODUCTION STAGE
+
+#step 7 - use nginx as the base image for serving the app (from dockerhub)
+FROM nginx:alpine
+
+#step 8 - copy the build output from the previous stage to the Nginx wb server direc
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Step 9: Expose the default port Nginx uses to serve the app (always 80)
+EXPOSE 80
+
+#step 10 - define command to run nginx
+CMD ["nginx", "-g", "daemon off;"]

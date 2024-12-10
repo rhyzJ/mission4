@@ -11,8 +11,10 @@ app.use(express.json());
 // Initialize chatSession as null
 let chatSession = null;
 
+console.log(process.env.API_KEY);
+
 // Function to initialize generative AI model
-async function initializeGenerativeAI(prompt, jobTitle) {
+async function initializeGenerativeAI(prompt) {
   try {
     if (!process.env.API_KEY) {
       throw new Error("API key is missing in environment variables.");
@@ -21,7 +23,7 @@ async function initializeGenerativeAI(prompt, jobTitle) {
     const genAi = new GoogleGenerativeAI(process.env.API_KEY);
     const model = await genAi.getGenerativeModel({
       model: "gemini-1.5-flash",
-      systemInstruction: `You are a highly skilled and experienced job interviewer specializing in the field of ${jobTitle}. ${prompt}`,
+      systemInstruction: `Your name is Tina, you are a highly trained car insurance consultant. You will ask a series of questions from the user and will make a recommendation of one or more insurance products to the user and will provide reasons for these reccomendations. The three insurance products that you can reccomend are: Mechanical Breakdown Insurance (MBI), Comprehensive Car Insurance, Third Party Car Insurance. MBI is not available to trucks and racing cars. Comprehensive Car Insurance is only available to any motor vehicles less than 10 years old.${prompt}`,
     });
     return model;
   } catch (error) {
@@ -31,24 +33,14 @@ async function initializeGenerativeAI(prompt, jobTitle) {
 }
 
 // Start interview route
-
 app.post("/api/startInterview", async (req, res) => {
-  const { jobTitle, resetInterview } = req.body;
   const prompt = `
-  Simulate a job interview for a ${jobTitle} position. 
-  The interview begins with the candidate giving you their name:
-  After each candidate response, generate one insightful follow-up question ONE AT A TIME. 
-  These questions should dynamically adapt to the candidate's answers.
-  * Avoid repeated questions. 
-  * Questions must be contextually relevant and thought-provoking. 
-  * Maintain a professional, encouraging, and conversational tone. 
-  After you have asked 6 questions, provide: 
-  1. A concise interview summary, highlighting strengths and areas for improvement. 
-  2. A closing remark thanking the candidate. 
+  if the user responds with yes then continue to ask questions, if they respond no, respond with "Okay no worries, have a great day!".
+  If the user opts in, ask one question at a time to find out which insurance policiy suits them best. Do NOT ask them which policy they want, assume they know nothing about insurance. Find out about their car and needs to find the best policy for them by asking personal questions.
 `;
 
   try {
-    const model = await initializeGenerativeAI(prompt, jobTitle);
+    const model = await initializeGenerativeAI(prompt);
 
     chatSession = model.startChat({
       history: [],
@@ -58,7 +50,7 @@ app.post("/api/startInterview", async (req, res) => {
 
     // console.log("Chat session initialized:", chatSession);
 
-    const initialResponse = `Hi there I'm an Interview chatbot named Yapper. Today we will be conducting a mock interview for the position of ${jobTitle}. Let's get introduced by you telling me your name.`; // Initial response from AI to start the interview
+    const initialResponse = `I’m Tina.  I help you to choose the right insurance policy for you.  May I ask you a few personal questions to make sure I recommend the best policy for you? Type yes and submit to get started!`; // Initial response from AI to start the interview
     res.json({ aiResponse: initialResponse });
   } catch (error) {
     console.error("❌ Error in starting interview:", error);
@@ -111,7 +103,7 @@ app.use((req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server is listening on http://localhost:${PORT}`);
 });
