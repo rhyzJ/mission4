@@ -15,7 +15,7 @@ RUN npm install
 #step 5 -copy all the app code
 COPY . .
 
-# PRODUCTION STAGE
+# PRODUCTION STAGE #
 FROM node:18-alpine
 
 # step 6 - set the working directory inside the container

@@ -16,6 +16,7 @@ services:
       context: ./m3Backend
     ports:
       - "5001:5001"
+      # hostPort:DockerPort
     environment:
       - API_KEY=${API_KEY}
     env_file:
