@@ -21,10 +21,9 @@ function InsuranceRec() {
   const handleSubmission = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5001/api/interview",
-        { userResponse }
-      );
+      const response = await axios.post("http://localhost:5001/api/interview", {
+        userResponse,
+      });
 
       setChatHistory([
         ...chatHistory,
@@ -116,6 +115,12 @@ function InsuranceRec() {
             </button>
           </div>
         )}
+      </div>
+      <div className={styles.imgContainer}>
+        <img
+          className={styles.tinaImg}
+          src="https://content.tgstatic.co.nz/webassets/globalassets/search-wizard/search-wizard-tina-mobile-v2.png"
+        />
       </div>
     </>
   );

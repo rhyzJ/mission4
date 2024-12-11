@@ -40,14 +40,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.19);
 }
 
-.jobTitleContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 35rem;
-  gap: 0.5rem;
-}
-
 .label {
   color: #fefcfc;
   font-weight: 500;
@@ -182,6 +174,18 @@
   box-sizing: border-box;
   margin: 0 auto;
   display: block;
+}
+
+.imgContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tinaImg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
