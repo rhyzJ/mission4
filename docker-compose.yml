@@ -1,29 +1,32 @@
-version: "3.8"
+version: "3.8" #version of docker compose being used
 
 services:
+/* ------------------ frontend config ---------------- */
   frontend:
-    build:
-      context: ./m3Frontend
+    build: 
+      context: ./m3Frontend # defines the build context as my frontend directory
     ports:
-      - "80:80"
+      - "80:80" # port mapping, 80 on the host, 80 in the container
     networks:
-      - app-network
+      - app-network # connect front end to the shared app-network for communication
     environment:
-      - REACT_APP_API_URL=http://backend:5001
+      - REACT_APP_API_URL=http://backend:5001 # sets n environment variable for the API URL ~ points to the backend
 
+/* ------------------ backend config ----------------- */
   backend:
     build:
-      context: ./m3Backend
+      context: ./m3Backend # defines the build context as my backend directory
     ports:
-      - "5001:5001"
-      # hostPort:DockerPort
+      - "5001:5001" # port mapping, 5001 on the host, 5001 in the container
     environment:
-      - API_KEY=${API_KEY}
+      - API_KEY=${API_KEY} # pass apikey from host environment for secure access
     env_file:
-      - .env
+      - .env # load env variables fromm file
     networks:
-      - app-network
+      - app-network # connect back end to the shared app-network for communication
+
+/* ------------------ network config ----------------- */
 
 networks:
   app-network:
-    driver: bridge
+    driver: bridge #uses default bridge driver to allow communication between services (same network)

@@ -1,37 +1,49 @@
 import { useState, useRef, useEffect } from "react";
-import axios from "axios";
+//useRef creates a reference to DOM elements
+//useEffect to perform side effects (used for scrolling) when dependency changes
+import axios from "axios"; //makes http requests to backend
 import styles from "./InsuranceRec.module.css";
 
 function InsuranceRec() {
   const [chatHistory, setChatHistory] = useState([]);
   const [userResponse, setUserResponse] = useState("");
 
-  // create a ref hook to hold the chat history container element
-  const chatHistoryEndRef = useRef(null);
+  // create a ref hook to hold the chat history container element(for auto scrolling)
+  const chatHistoryContainerRef = useRef(null);
 
-  // scroll to the bottom when chatHistory changes
+  //autoscrolling in chathistory container (learning new)
   useEffect(() => {
-    if (chatHistoryEndRef.current) {
-      chatHistoryEndRef.current.scrollIntoView({ behavior: "smooth" });
+    // use effect is trigggered everytime chat history updates
+    //checkes is chatHistoryContainerRef is attatched to the dom
+    //adjuest the containers current scroll position to total height of container, new messages are then auto scrolled into view
+    if (chatHistoryContainerRef.current) {
+      chatHistoryContainerRef.current.scrollTop =
+        chatHistoryContainerRef.current.scrollHeight;
     }
   }, [chatHistory]);
 
-  //use axios to send to endpoint
+  /* -------------------------------------------------------------------------- */
+  /*                   MESSAGE SUBMISSION FUNCTION                              */
+  /*     purpose = sends users response to the api and updates chat history     */
+  /* -------------------------------------------------------------------------- */
 
   const handleSubmission = async (e) => {
     e.preventDefault();
+    // send post request with user input
     try {
       const response = await axios.post("http://localhost:5001/api/interview", {
         userResponse,
       });
 
-      setChatHistory([
-        ...chatHistory,
+      // update chat history state
+      setChatHistory((prevChatHistory) => [
+        ...prevChatHistory,
         { role: "user", text: userResponse },
         { role: "ai", text: response.data.aiResponse },
       ]);
 
-      setUserResponse(""); // clear
+      // clear userResponse to reset the inpout field
+      setUserResponse("");
     } catch (error) {
       console.error(
         "❌ Error sending response:",
@@ -40,16 +52,19 @@ function InsuranceRec() {
     }
   };
 
-  // to start the interview sends a POST request to the server
-  // if server responds, add it to chat history for ui
-  // log cslgs for error and success
+  /* -------------------------------------------------------------------------- */
+  /*                           START TINA FUNCTION                              */
+  /* -------------------------------------------------------------------------- */
+
   const handleStartTina = async () => {
+    // sends axiosrequest to "start"
     try {
       const response = await axios.post(
         "http://localhost:5001/api/startInterview"
       );
 
-      if (response.data && response.data.aiResponse) {
+      // updates chat history with the opening message
+      if (response.data?.aiResponse) {
         setChatHistory([
           {
             role: "ai",
@@ -72,31 +87,32 @@ function InsuranceRec() {
         <img
           className={styles.logo}
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuUSrMhuoa9oRL7pyUTPJASr16X0Pm6Om8yQ&s"
-          alt="turners logo"
+          alt="Turners logo"
         />
         <h1 className={styles.heading}>Meet Tina</h1>
         <h2 className={styles.subheading}>
           Your AI Insurance Policy Assistant
         </h2>
 
-        {/* start chat */}
-        {chatHistory.length < 1 && (
+        {/* start the chat with tina button */}
+        {chatHistory.length === 0 && (
           <button onClick={handleStartTina} className={styles.startButton}>
             Start Chatting to Tina
           </button>
         )}
 
-        {/* chat history display */}
+        {/* chat history displaying */}
         {chatHistory.length > 0 && (
-          <div className={styles.chatHistoryContainer}>
+          <div
+            className={styles.chatHistoryContainer}
+            ref={chatHistoryContainerRef}
+          >
             {chatHistory.map((entry, index) => (
               <div key={index} className={styles.role}>
                 <strong>{entry.role === "user" ? "You" : "Tina"}</strong>
                 <span>{entry.text}</span>
               </div>
             ))}
-            {/* This div is used to scroll to the bottom of chat history */}
-            <div ref={chatHistoryEndRef}></div>
           </div>
         )}
 
@@ -120,6 +136,7 @@ function InsuranceRec() {
         <img
           className={styles.tinaImg}
           src="https://content.tgstatic.co.nz/webassets/globalassets/search-wizard/search-wizard-tina-mobile-v2.png"
+          alt="Tina"
         />
       </div>
     </>
